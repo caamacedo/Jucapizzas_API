@@ -1,20 +1,21 @@
 <?php
-class Pizza
+class Bebida
 {
     private $conn;
-    private $tabela = "pizzas";
+    private $tabela = "bebidas";
  
-    public $idPizza;
+    public $idBebida;
     public $nome;
-    public $ingredientes;
+    public $tamanho;
     public $valor;
+    public $categoria;
  
     public function __construct($db) {
         $this->conn = $db;
     }
   public function getall(){
     //Salvando a query nem SQL em uma variável
-      $query = "SELECT idPizza, nome, ingredientes, valor FROM "  . $this->tabela;
+      $query = "SELECT idBebida, nome, tamanho, valor, categoria FROM "  . $this->tabela;
  
       //Preparando a query para ser executada, ou seja, vinculando ela à conexão
       $stmt = $this->conn->prepare($query);
@@ -27,21 +28,22 @@ class Pizza
   public function get(){
     //Localhost/api/pizza/get.php?id=7
     $query = 'SELECT
-    idPizza,
+    idBebida,
     nome,
-    ingredientes,
-    valor
+    tamanho,
+    valor,
+    categoria
     FROM
     '. $this->tabela .'
     WHERE
-    idPizza = ?
+    idBebida = ?
     LIMIT 1';
  
   //Preparar a query
   $stmt = $this->conn->prepare($query);
  
   //Vincula o ID
-  $stmt->bindParam(1, $this->idPizza);
+  $stmt->bindParam(1, $this->idBebida);
  
   //Executar a query
   $stmt->execute();
@@ -50,7 +52,13 @@ class Pizza
  
   // Define as propriedades
   $this->nome = $row['nome'];
-  $this->ingredientes = $row['ingredientes'];
+  $this->tamanho = $row['tamanho'];
   $this->valor = $row['valor'];
+  $this->categoria = $row['categoria'];
+ 
+ 
 }
-}
+ 
+ 
+  }
+  

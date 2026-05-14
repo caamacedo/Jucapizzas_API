@@ -1,4 +1,3 @@
-
 <?php
 // Headers
 header('Access-Control-Allow-Origin: *');
@@ -7,14 +6,14 @@ header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With');
  
 include_once '../../config/Database.php';
-include_once '../../models/Pizza.php';
+include_once '../../models/Bebida.php';
  
 // Instanciar o banco de dados e conectar
 $database = new Database();
 $db = $database->getConnection();
  
-// Instanciar o objeto Pizza
-$pizza = new Pizza($db);
+// Instanciar o objeto Bebida
+$bebida = new Bebida($db);
  
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
@@ -24,44 +23,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Verificar se os dados não estão vazios
         if (
             !empty($data->nome) &&
-            !empty($data->ingredientes) &&
-            !empty($data->valor)
+            !empty($data->tamanho) &&
+            !empty($data->valor) &&
+            !empty($data->categoria)
         ) {
-            // Atribuir os valores ao objeto Pizza
-            $pizza->nome = $data->nome;
-            $pizza->ingredientes = $data->ingredientes;
-            $pizza->valor = $data->valor;
+            // Atribuir os valores ao objeto Bebida
+            $bebida->nome = $data->nome;
+            $bebida->tamanho = $data->tamanho;
+            $bebida->valor = $data->valor;
+            $bebida->categoria = $data->categoria;
  
-            // Criar a pizza
-            if ($pizza->add()) {
-                //http_response_code(201);
-                header('HTTP/1.1 201 Created');
+            // Criar a bebida
+            if ($bebida->add()) {
+                http_response_code(201);
                 // Resposta de sucesso
                 echo json_encode(
-                    array('Mensagem' => 'Pizza Criada com Sucesso')
+                    array('Mensagem' => 'Bebida Criada com Sucesso')
                 );
             } else {
-                header('HTTP/1.1 500 Bad Request');
-                //http_response_code(500);
+                http_response_code(500);
                 // Resposta de erro
                 echo json_encode(
-                    array('Mensagem' => 'Nao foi possivel criar a Pizza')
+                    array('Mensagem' => 'Nao foi possivel criar a Bebida')
                 );
             }
         } else {
-            http_response_code(405);
-            header('HTTP/1.1 405 Method Not Allowed');
+            http_response_code(400);
             // Resposta se dados estiverem incompletos
             echo json_encode(
-                array('Mensagem' => 'Dados Incompletos. Nao foi possivel criar a Pizza.')
+                array('Mensagem' => 'Dados Incompletos. Nao foi possivel criar a Bebida.')
             );
         }
     } catch (Exception $e) {
         echo json_encode(array("erro" => $e->getMessage()));
     }
 } else {
-    header('HTTP/1.1 405 Method Not Allowed');
-    //http_response_code(405);
+    http_response_code(405);
     echo json_encode(array("erro" => "Método não suportado!"));
 }
- 

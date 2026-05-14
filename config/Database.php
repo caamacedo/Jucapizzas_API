@@ -1,4 +1,26 @@
 <?php
+if (!function_exists('http_response_code')) {
+    function http_response_code($code = null) {
+        static $current = 200;
+        if ($code === null) {
+            return $current;
+        }
+        $current = (int) $code;
+        $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0';
+        $messages = array(
+            200 => 'OK',
+            201 => 'Created',
+            400 => 'Bad Request',
+            404 => 'Not Found',
+            405 => 'Method Not Allowed',
+            500 => 'Internal Server Error',
+        );
+        $msg = isset($messages[$current]) ? $messages[$current] : 'Unknown';
+        header($protocol . ' ' . $current . ' ' . $msg, true, $current);
+        return $current;
+    }
+}
+
 class Database {
     private $host = "localhost";
     private $db_name = "jucapizzasdb";

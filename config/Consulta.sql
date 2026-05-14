@@ -51,4 +51,4 @@ INSERT INTO bebidas (nome, tamanho, valor, categoria) VALUES
 ('Corona', 'Long Neck 355ml', 8.50, 'ALCOOLICO'
 );
 
-SELECT * FROM bebidas
+SELECT * FROM pizzas

@@ -13,25 +13,25 @@ $database = new Database();
 $db = $database->getConnection();
  
 // Instanciar o objeto Pizza
-$bebida = new Bebida($db);
+$bebidas = new Bebida($db);
  
-$bebida->idBebida = isset($_GET['id']) ? $_GET['id'] : null;
+$bebidas->idBebida = isset($_GET['id']) ? $_GET['id'] : null;
  
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
  
-    if ($bebida->idBebida) {
+    if ($bebidas->idBebida) {
         // Busca a bebida
-        $bebida->get();
+        $bebidas->get();
  
-        if ($bebida->nome) { // Verifica se a bebida foi encontrada
+        if ($bebidas->nome) { // Verifica se a bebida foi encontrada
  
         // Cria o array de resposta
         $bebida_arr = array(
-            "idBebida" => $bebida->idBebida,
-            "nome" => $bebida->nome,
-            "tamanho" => $bebida->tamanho,
-            "valor" => $bebida->valor,
-            "categoria" => $bebida->categoria
+            "idBebida" => $bebidas->idBebida,
+            "nome" => $bebidas->nome,
+            "tamanho" => $bebidas->tamanho,
+            "valor" => $bebidas->valor,
+            "categoria" => $bebidas->categoria
         );
  
         // Converte para JSON e envia a resposta

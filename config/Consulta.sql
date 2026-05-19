@@ -52,3 +52,5 @@ INSERT INTO bebidas (nome, tamanho, valor, categoria) VALUES
 );
 
 SELECT * FROM pizzas
+SELECT * FROM bebidas
+

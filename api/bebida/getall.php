@@ -5,7 +5,7 @@ header("Content-Type: application/json; charset=UTF-8");
 
 // Incluir arquivos
 include_once '../../config/Database.php';
-include_once '../../models/Bebida.php';
+include_once '../../models/bebida.php';
 
 // Conexão com o banco
 $database = new Database();

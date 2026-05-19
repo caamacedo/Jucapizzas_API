@@ -2,59 +2,72 @@
 // Headers
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
-header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Methods: PUT');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With');
- 
+
 include_once '../../config/Database.php';
 include_once '../../models/bebida.php';
- 
+
 // Instanciar o banco de dados e conectar
 $database = new Database();
 $db = $database->getConnection();
- 
+
 // Instanciar o objeto Bebida
 $bebida = new Bebida($db);
- 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     try {
         // Obter os dados postados
         $data = json_decode(file_get_contents("php://input"));
- 
-        // Verificar se os dados não estão vazios
+
+        // Aceitar id ou idBebida no JSON
+        $idBebida = null;
+        if (is_object($data)) {
+            if (!empty($data->idBebida)) {
+                $idBebida = $data->idBebida;
+            } elseif (!empty($data->id)) {
+                $idBebida = $data->id;
+            }
+        }
+
+        // Verificar se os dados não estão vazios e se o ID foi fornecido
         if (
+            is_object($data) &&
+            !empty($idBebida) &&
             !empty($data->nome) &&
             !empty($data->tamanho) &&
             !empty($data->valor) &&
             !empty($data->categoria)
         ) {
-            // Atribuir os valores ao objeto Bebida
+            // Atribuir o ID para atualização
+            $bebida->idBebida = $idBebida;
+
+            // Atribuir os demais valores
             $bebida->nome = $data->nome;
             $bebida->tamanho = $data->tamanho;
             $bebida->valor = $data->valor;
             $bebida->categoria = $data->categoria;
- 
-            // Criar a bebida
-            if ($bebida->add()) {
-                http_response_code(201);
-                // Resposta de sucesso
+
+            // Tentar atualizar a bebida
+            if ($bebida->update()) {
+                http_response_code(200);
                 echo json_encode(
-                    array('Mensagem' => 'Bebida Criada com Sucesso')
+                    array('Mensagem' => 'Bebida Atualizada com Sucesso')
                 );
             } else {
                 http_response_code(500);
-                // Resposta de erro
                 echo json_encode(
-                    array('Mensagem' => 'Nao foi possivel criar a Bebida')
+                    array('Mensagem' => 'Nao foi possivel atualizar a Bebida')
                 );
             }
         } else {
             http_response_code(400);
-            // Resposta se dados estiverem incompletos
             echo json_encode(
-                array('Mensagem' => 'Dados Incompletos. Nao foi possivel criar a Bebida.')
+                array('Mensagem' => 'Dados Incompletos. Nao foi possivel atualizar a Bebida.')
             );
         }
     } catch (Exception $e) {
+        http_response_code(500);
         echo json_encode(array("erro" => $e->getMessage()));
     }
 } else {

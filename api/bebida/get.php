@@ -6,7 +6,7 @@ header("Content-Type: application/json; charset=UTF-8");
  
 // Incluir arquivos de banco de dados e modelo
 include_once '../../config/Database.php';
-include_once '../../models/Bebida.php';
+include_once '../../models/bebida.php';
  
 // Instanciar o objeto Database e obter a conexão
 $database = new Database();

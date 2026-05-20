@@ -89,4 +89,21 @@ class Pizza {
 
         return false;
     }
+    public function delete() {
+        $query = 'DELETE FROM ' . $this->tabela . ' WHERE idPizza = ?';
+
+        $stmt = $this->conn->prepare($query);
+
+        $this->idPizza = htmlspecialchars(strip_tags($this->idPizza));
+
+        $stmt->bindParam(1, $this->idPizza);
+
+        if ($stmt->execute() && $stmt->rowCount() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+    
 }
+
